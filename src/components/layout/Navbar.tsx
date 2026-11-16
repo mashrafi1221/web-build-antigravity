@@ -97,19 +97,6 @@ export function Navbar() {
             })}
             {isAuthenticated && (
               <Link
-                href="/dashboard"
-                className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                  pathname === "/dashboard"
-                    ? "text-teal-700 bg-teal-50"
-                    : "text-teal-600 hover:text-teal-700 hover:bg-teal-50/50"
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                <span>Dashboard</span>
-              </Link>
-            )}
-            {isAuthenticated && (
-              <Link
                 href="/portfolio"
                 className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-colors flex items-center gap-1.5 ${
                   pathname.startsWith("/portfolio")
@@ -202,15 +189,6 @@ export function Navbar() {
               </Link>
             );
           })}
-          {isAuthenticated && (
-            <Link
-              href="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-bold text-teal-700 bg-teal-50"
-            >
-              Student Dashboard
-            </Link>
-          )}
           {isAuthenticated && (
             <Link
               href="/portfolio"
