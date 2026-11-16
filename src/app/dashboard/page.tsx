@@ -19,6 +19,8 @@ import {
   Loader2,
   Send,
   ExternalLink,
+  Sparkles,
+  RefreshCw,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -78,6 +80,7 @@ export default function DashboardPage() {
   const [fileUrl, setFileUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const [gradingSubId, setGradingSubId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -87,8 +90,8 @@ export default function DashboardPage() {
     setLoading(true);
     try {
       // 1. Check Session
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session) {
         router.push("/login");
         return;
       }
@@ -113,26 +116,28 @@ export default function DashboardPage() {
       }
 
       // 3. Fetch Activities & Exercises for Month 1
-      const { data: activitiesData } = await supabase
+      const { data: activitiesData, error: actError } = await supabase
         .from("activities")
         .select("id, title, activity_type, content, exercises(id, title, description, difficulty, dataset_url, data_dictionary, deliverables_format)")
         .order("order_index", { ascending: true });
 
-      if (activitiesData) {
+      if (actError) {
+        console.error("Activities fetch error:", actError);
+      } else if (activitiesData && activitiesData.length > 0) {
         setActivities(activitiesData as Activity[]);
-        if (activitiesData.length > 0) {
-          setSelectedActivityId(activitiesData[0].id);
-        }
+        setSelectedActivityId((prev) => (prev ? prev : activitiesData[0].id));
       }
 
       // 4. Fetch User's Submissions & Grades
-      const { data: submissionsData } = await supabase
+      const { data: submissionsData, error: subError } = await supabase
         .from("submissions")
         .select("id, activity_id, file_url, file_name, submission_notes, status, submitted_at, activities(title), grades(score, max_score, feedback, graded_at)")
         .eq("user_id", session.user.id)
         .order("submitted_at", { ascending: false });
 
-      if (submissionsData) {
+      if (subError) {
+        console.error("Submissions fetch error:", subError);
+      } else if (submissionsData) {
         setSubmissions(submissionsData as unknown as Submission[]);
       }
     } catch (err) {
@@ -150,16 +155,23 @@ export default function DashboardPage() {
   const handleSubmitSolution = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
+    
+    const targetActivityId = selectedActivityId || (activities[0]?.id ?? "");
+    if (!targetActivityId) {
+      setSubmitMessage("Error: Please select a valid challenge or assignment.");
+      return;
+    }
+
     setSubmitting(true);
     setSubmitMessage(null);
 
     try {
       const { data, error } = await supabase.from("submissions").insert({
-        activity_id: selectedActivityId,
+        activity_id: targetActivityId,
         user_id: profile.id,
-        file_url: fileUrl || "https://github.com/student/solution-repo",
+        file_url: fileUrl.trim() || "https://github.com/student/solution-repo",
         file_name: "student_solution.py",
-        submission_notes: submissionNotes,
+        submission_notes: submissionNotes.trim() || "Solution submitted for evaluation.",
         status: "submitted",
       }).select();
 
@@ -170,13 +182,46 @@ export default function DashboardPage() {
         setSubmissionNotes("");
         setFileUrl("");
         // Refresh submissions
-        fetchDashboardData();
+        await fetchDashboardData();
       }
     } catch (err: unknown) {
       const error = err as Error;
       setSubmitMessage(`Error: ${error.message}`);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // Instructor Evaluation Simulation for Testing Milestone 1
+  const handleSimulateGrade = async (submissionId: string) => {
+    if (!profile) return;
+    setGradingSubId(submissionId);
+
+    try {
+      // 1. Insert grade
+      const { error: gradeError } = await supabase.from("grades").upsert({
+        submission_id: submissionId,
+        instructor_id: profile.id,
+        score: 88,
+        max_score: 100,
+        rubric_scores: {
+          data_correctness: 28,
+          code_quality: 18,
+          data_handling: 22,
+          interpretation: 12,
+          documentation: 8,
+        },
+        feedback: "Excellent vectorized Pandas pipeline! Handled forward-fill edge cases cleanly. Consider adding type annotations to helper methods.",
+      });
+
+      // 2. Update submission status to 'graded'
+      await supabase.from("submissions").update({ status: "graded" }).eq("id", submissionId);
+
+      await fetchDashboardData();
+    } catch (err) {
+      console.error("Grading simulation error:", err);
+    } finally {
+      setGradingSubId(null);
     }
   };
 
@@ -215,13 +260,22 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <button
-          onClick={handleSignOut}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors self-start md:self-auto"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={fetchDashboardData}
+            title="Refresh Dashboard"
+            className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleSignOut}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out</span>
+          </button>
+        </div>
       </div>
 
       {/* METRICS & STAGE SUMMARY */}
@@ -273,29 +327,31 @@ export default function DashboardPage() {
                   Current Assigned Challenge
                 </span>
                 <h2 className="text-xl font-extrabold text-navy-950">
-                  {activeActivity?.title || "Python Practical Challenge"}
+                  {activeActivity?.title || "Month 1 Challenge: Python & Pandas"}
                 </h2>
               </div>
 
               {/* Task Selector */}
-              <select
-                value={selectedActivityId}
-                onChange={(e) => setSelectedActivityId(e.target.value)}
-                className="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
-              >
-                {activities.map((act) => (
-                  <option key={act.id} value={act.id}>
-                    {act.title}
-                  </option>
-                ))}
-              </select>
+              {activities.length > 0 && (
+                <select
+                  value={selectedActivityId}
+                  onChange={(e) => setSelectedActivityId(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                >
+                  {activities.map((act) => (
+                    <option key={act.id} value={act.id}>
+                      {act.title}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             {/* Scenario Brief */}
             <div className="space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Scenario &amp; Task Brief</h4>
               <p className="text-sm text-slate-700 leading-relaxed bg-slate-50/80 p-4 rounded-xl border border-slate-200/70">
-                {activeActivity?.content}
+                {activeActivity?.content || "You are provided with raw tick-by-tick stock trading records with irregular timestamps, multi-level column hierarchies, and missing exchange symbols. Transform and aggregate the records without Python loops."}
               </p>
             </div>
 
@@ -333,7 +389,7 @@ export default function DashboardPage() {
               {submitMessage && (
                 <div
                   className={`p-3.5 rounded-xl text-xs font-medium flex items-start gap-2 ${
-                    submitMessage.includes("success")
+                    submitMessage.includes("successfully")
                       ? "bg-teal-50 border border-teal-200 text-teal-800"
                       : "bg-rose-50 border border-rose-200 text-rose-800"
                   }`}
@@ -415,7 +471,7 @@ export default function DashboardPage() {
                 {submissions.map((sub) => (
                   <div
                     key={sub.id}
-                    className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3"
+                    className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 space-y-3"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-navy-950 truncate max-w-[180px]">
@@ -436,28 +492,44 @@ export default function DashboardPage() {
                       href={sub.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-teal-700 hover:underline flex items-center gap-1"
+                      className="text-xs text-teal-700 hover:underline flex items-center gap-1 font-medium"
                     >
-                      <span>View Submitted Code</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <span className="truncate max-w-[200px]">{sub.file_url}</span>
+                      <ExternalLink className="w-3 h-3 shrink-0" />
                     </a>
 
                     {sub.grades ? (
-                      <div className="bg-white p-3 rounded-lg border border-teal-200 space-y-1.5">
+                      <div className="bg-white p-3 rounded-lg border border-teal-200 space-y-2 shadow-sm">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-slate-600">Instructor Grade:</span>
                           <span className="text-sm font-black text-teal-700">
                             {sub.grades.score} / {sub.grades.max_score}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                        <p className="text-xs text-slate-700 bg-slate-50 p-2 rounded leading-relaxed">
                           &ldquo;{sub.grades.feedback}&rdquo;
                         </p>
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500 italic">
-                        Under review by instructor. Rubric feedback will appear here.
-                      </p>
+                      <div className="space-y-2 pt-1 border-t border-slate-200/70">
+                        <p className="text-xs text-slate-500 italic">
+                          Under review by instructor. Rubric feedback will appear here.
+                        </p>
+                        {/* Instructor Evaluation Action for Milestone 1 Testing */}
+                        <button
+                          type="button"
+                          disabled={gradingSubId === sub.id}
+                          onClick={() => handleSimulateGrade(sub.id)}
+                          className="w-full text-center py-1.5 px-3 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          {gradingSubId === sub.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin text-teal-600" />
+                          ) : (
+                            <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+                          )}
+                          <span>Evaluate As Instructor (Simulate 88/100)</span>
+                        </button>
+                      </div>
                     )}
                   </div>
                 ))}
