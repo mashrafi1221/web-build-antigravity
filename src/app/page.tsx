@@ -18,15 +18,14 @@ export default function HomePage() {
   return (
     <div className="space-y-24 pb-20 overflow-hidden">
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200">
-        {/* Ambient background glow dots */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 left-1/3 w-[300px] h-[250px] bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32 bg-gradient-to-b from-white/95 via-white/80 to-transparent border-b border-slate-200/80 backdrop-blur-[2px]">
+        {/* Hero-specific subtle atmospheric glow lights */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-r from-teal-400/15 via-cyan-400/15 to-indigo-500/10 rounded-full blur-[110px] pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto space-y-6">
             {/* Animated Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm animate-fade-in hover:bg-teal-100 transition-colors">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm hover:shadow transition-all backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
               <span>Six-Month Practical Training &amp; Assessment Platform</span>
             </div>
@@ -45,7 +44,7 @@ export default function HomePage() {
             </p>
 
             {/* Core Value Tag */}
-            <div className="p-3.5 bg-navy-950/5 border border-navy-900/10 rounded-xl inline-block text-sm text-navy-900 font-medium animate-fade-in-up animation-delay-200 backdrop-blur-sm">
+            <div className="p-3.5 bg-white/80 border border-navy-900/10 rounded-xl inline-block text-sm text-navy-900 font-medium animate-fade-in-up animation-delay-200 backdrop-blur-md shadow-sm">
               💡 <strong>Core Rule:</strong> Not an introductory video course. Designed specifically for learners who already understand fundamentals and need real execution experience.
             </div>
 
@@ -60,7 +59,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/roadmap"
-                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-700 hover:text-navy-950 hover:bg-slate-50 hover:border-slate-400 font-semibold text-base shadow-sm transition-all transform hover:-translate-y-0.5 flex items-center justify-center"
+                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white/90 border border-slate-300 text-slate-700 hover:text-navy-950 hover:bg-white hover:border-slate-400 font-semibold text-base shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5 flex items-center justify-center backdrop-blur-md"
               >
                 View the 6-Month Roadmap
               </Link>
@@ -71,7 +70,7 @@ export default function HomePage() {
 
       {/* PROBLEM SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 lg:p-12 shadow-sm card-hover-lift">
+        <div className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 lg:p-12 shadow-sm card-hover-lift">
           <div className="max-w-3xl mx-auto text-center space-y-4 mb-12">
             <div className="inline-flex items-center gap-2 text-amber-700 bg-amber-50 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-amber-200">
               <AlertTriangle className="w-4 h-4 text-amber-600" />
@@ -86,7 +85,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-6 rounded-xl bg-rose-50/50 border border-rose-200 space-y-3 transition-transform hover:-translate-y-1">
+            <div className="p-6 rounded-xl bg-rose-50/70 border border-rose-200/90 space-y-3 transition-transform hover:-translate-y-1 backdrop-blur-sm">
               <h3 className="font-semibold text-rose-900 text-lg flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
                 The Passive Learning Trap
@@ -111,7 +110,7 @@ export default function HomePage() {
               </ul>
             </div>
 
-            <div className="p-6 rounded-xl bg-teal-50/50 border border-teal-200 space-y-3 transition-transform hover:-translate-y-1">
+            <div className="p-6 rounded-xl bg-teal-50/70 border border-teal-200/90 space-y-3 transition-transform hover:-translate-y-1 backdrop-blur-sm">
               <h3 className="font-semibold text-teal-950 text-lg flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse" />
                 The Practice-First Solution
@@ -151,7 +150,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 card-hover-lift group">
+          <div className="p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-sm space-y-4 card-hover-lift group">
             <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
               <Code2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
             </div>
@@ -163,7 +162,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 card-hover-lift group">
+          <div className="p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-sm space-y-4 card-hover-lift group">
             <div className="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300">
               <Database className="w-6 h-6 group-hover:scale-110 transition-transform" />
             </div>
@@ -175,7 +174,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 card-hover-lift group">
+          <div className="p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-sm space-y-4 card-hover-lift group">
             <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
               <FileCheck2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
             </div>
@@ -187,7 +186,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 card-hover-lift group md:col-span-1">
+          <div className="p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-sm space-y-4 card-hover-lift group md:col-span-1">
             <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
               <Users2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
             </div>
@@ -199,7 +198,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4 card-hover-lift group md:col-span-2">
+          <div className="p-8 rounded-2xl bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-sm space-y-4 card-hover-lift group md:col-span-2">
             <div className="w-12 h-12 rounded-xl bg-navy-50 text-navy-800 flex items-center justify-center group-hover:bg-navy-900 group-hover:text-teal-400 transition-all duration-300">
               <FolderGit2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
             </div>
@@ -215,7 +214,10 @@ export default function HomePage() {
 
       {/* ROADMAP PREVIEW */}
       <section className="bg-navy-950 text-white py-20 border-y border-navy-850 relative overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+        {/* Subtle grid pattern inside dark section */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-70 pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-[600px] h-[350px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-[400px] h-[250px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
@@ -272,7 +274,7 @@ export default function HomePage() {
             ].map((step, idx) => (
               <div
                 key={idx}
-                className="bg-navy-900 border border-navy-800 rounded-xl p-6 space-y-3 hover:border-teal-400/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1 group"
+                className="bg-navy-900/90 backdrop-blur-sm border border-navy-800 rounded-xl p-6 space-y-3 hover:border-teal-400/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1 group"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-teal-400 bg-teal-950/80 px-2.5 py-1 rounded-md border border-teal-800 group-hover:border-teal-600 transition-colors">
@@ -292,26 +294,26 @@ export default function HomePage() {
 
       {/* FINAL CALL TO ACTION */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="bg-gradient-to-r from-navy-900 via-navy-850 to-navy-900 text-white rounded-3xl p-10 sm:p-14 border border-navy-800 shadow-xl space-y-6 relative overflow-hidden card-hover-lift">
-          <div className="absolute inset-0 bg-radial-gradient opacity-30 pointer-events-none" />
+        <div className="bg-gradient-to-r from-navy-950 via-navy-900 to-navy-950 text-white rounded-3xl p-10 sm:p-14 border border-navy-800 shadow-2xl space-y-6 relative overflow-hidden card-hover-lift">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(45,212,191,0.12),transparent_70%)] pointer-events-none" />
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight relative z-10">
             Stop Watching Tutorials. Start Proving Your Capability.
           </h2>
-          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed relative z-10">
             Join the 6-month hands-on assessment academy. Complete real tasks, receive strict instructor reviews, and graduate with verifiable project evidence.
           </p>
-          <div className="pt-2 flex flex-col sm:flex-row justify-center gap-4">
+          <div className="pt-2 flex flex-col sm:flex-row justify-center gap-4 relative z-10">
             <Link
               href="/register"
-              className="px-8 py-3.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-base shadow-md hover:shadow-teal-500/20 transition-all transform hover:-translate-y-0.5 inline-flex items-center justify-center gap-2 group"
+              className="px-8 py-3.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-base shadow-lg hover:shadow-teal-500/25 transition-all transform hover:-translate-y-0.5 inline-flex items-center justify-center gap-2 group"
             >
               <span>Get Started</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="/program"
-              className="px-8 py-3.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-white font-semibold text-base border border-navy-700 transition-all transform hover:-translate-y-0.5 inline-flex items-center justify-center"
+              className="px-8 py-3.5 rounded-xl bg-navy-800/80 hover:bg-navy-700 text-white font-semibold text-base border border-navy-700 backdrop-blur-sm transition-all transform hover:-translate-y-0.5 inline-flex items-center justify-center"
             >
               Review Requirements
             </Link>

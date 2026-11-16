@@ -83,7 +83,7 @@ export default function HowItWorksPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl space-y-4 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Step-by-Step Experience
           </div>
@@ -103,7 +103,7 @@ export default function HowItWorksPage() {
             return (
               <div
                 key={idx}
-                className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm card-hover-lift group flex flex-col justify-between"
+                className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm card-hover-lift group flex flex-col justify-between"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -127,8 +127,10 @@ export default function HowItWorksPage() {
         </div>
 
         {/* RUBRIC SPOTLIGHT */}
-        <div className="mt-16 bg-navy-950 text-white rounded-2xl p-8 lg:p-12 border border-navy-850 card-hover-lift">
-          <div className="max-w-3xl space-y-3 mb-8">
+        <div className="mt-16 bg-navy-950 text-white rounded-2xl p-8 lg:p-12 border border-navy-850 shadow-xl card-hover-lift relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+          <div className="relative z-10 max-w-3xl space-y-3 mb-8">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-400">
               Evaluation Standards
             </span>
@@ -140,28 +142,28 @@ export default function HowItWorksPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="bg-navy-900/90 backdrop-blur-sm border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
               <span className="text-2xl font-extrabold text-teal-400">30%</span>
               <h4 className="text-sm font-bold text-white">Data Correctness</h4>
               <p className="text-xs text-slate-400">Accurate calculations, no logic bugs, proper handling of edge cases.</p>
             </div>
-            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="bg-navy-900/90 backdrop-blur-sm border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
               <span className="text-2xl font-extrabold text-teal-400">20%</span>
               <h4 className="text-sm font-bold text-white">Code Quality</h4>
               <p className="text-xs text-slate-400">Clean modular functions, PEP 8 styling, vectorization, no spaghetti code.</p>
             </div>
-            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="bg-navy-900/90 backdrop-blur-sm border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
               <span className="text-2xl font-extrabold text-teal-400">25%</span>
               <h4 className="text-sm font-bold text-white">Data Handling</h4>
               <p className="text-xs text-slate-400">Justified missing value strategy, outlier management, schema discipline.</p>
             </div>
-            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="bg-navy-900/90 backdrop-blur-sm border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
               <span className="text-2xl font-extrabold text-teal-400">15%</span>
               <h4 className="text-sm font-bold text-white">Interpretation</h4>
               <p className="text-xs text-slate-400">Meaningful conclusions that tie data back to actionable business questions.</p>
             </div>
-            <div className="bg-navy-900 border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="bg-navy-900/90 backdrop-blur-sm border border-navy-800 rounded-xl p-5 space-y-2 hover:border-teal-500/50 hover:bg-navy-850 transition-all duration-300 transform hover:-translate-y-1">
               <span className="text-2xl font-extrabold text-teal-400">10%</span>
               <h4 className="text-sm font-bold text-white">Documentation</h4>
               <p className="text-xs text-slate-400">Clear markdown explanations, schema definitions, and run instructions.</p>
@@ -173,7 +175,7 @@ export default function HowItWorksPage() {
         <div className="mt-16 text-center space-y-4">
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-800 font-semibold text-base shadow-sm transition-all transform hover:-translate-y-0.5 group"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-800 font-semibold text-base shadow-md transition-all transform hover:-translate-y-0.5 group"
           >
             <span>Create Your Student Account</span>
             <ArrowRight className="w-4 h-4 text-teal-400 group-hover:translate-x-1.5 transition-transform" />

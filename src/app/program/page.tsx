@@ -24,7 +24,7 @@ export default function ProgramPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl space-y-4 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Curriculum Architecture
           </div>
@@ -39,7 +39,7 @@ export default function ProgramPage() {
 
         {/* PREREQUISITES & AUDIENCE NOTICE */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-4 card-hover-lift animate-fade-in-up animation-delay-100">
+          <div className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm space-y-4 card-hover-lift animate-fade-in-up animation-delay-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center">
                 <CheckCircle2 className="w-6 h-6" />
@@ -65,7 +65,7 @@ export default function ProgramPage() {
             </ul>
           </div>
 
-          <div className="bg-amber-50/50 rounded-2xl border border-amber-200 p-8 shadow-sm space-y-4 card-hover-lift animate-fade-in-up animation-delay-200">
+          <div className="bg-amber-50/70 backdrop-blur-md rounded-2xl border border-amber-200/90 p-8 shadow-sm space-y-4 card-hover-lift animate-fade-in-up animation-delay-200">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center">
                 <AlertCircle className="w-6 h-6" />
@@ -86,14 +86,14 @@ export default function ProgramPage() {
         </div>
 
         {/* CORE SPECIFICATIONS TABLE */}
-        <div className="mt-16 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm card-hover-lift">
-          <div className="px-6 py-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div className="mt-16 bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm card-hover-lift">
+          <div className="px-6 py-5 bg-slate-50/80 border-b border-slate-200/90 flex items-center justify-between">
             <h3 className="font-bold text-navy-950 text-lg">Program Blueprint At A Glance</h3>
-            <span className="text-xs font-semibold px-2.5 py-1 bg-navy-900 text-white rounded-md">
+            <span className="text-xs font-semibold px-2.5 py-1 bg-navy-900 text-white rounded-md shadow-sm">
               24-Week Schedule
             </span>
           </div>
-          <div className="divide-y divide-slate-100 text-sm">
+          <div className="divide-y divide-slate-100/90 text-sm">
             <div className="grid grid-cols-1 sm:grid-cols-3 p-5 gap-2 hover:bg-slate-50/70 transition-colors">
               <span className="font-semibold text-navy-950">Duration</span>
               <span className="sm:col-span-2 text-slate-700">6 Months (24 structured weeks)</span>
@@ -133,7 +133,7 @@ export default function ProgramPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover-lift group">
+            <div className="p-6 bg-white/85 backdrop-blur-md rounded-xl border border-slate-200/90 shadow-sm space-y-3 card-hover-lift group">
               <Layers className="w-6 h-6 text-teal-600 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-navy-950 group-hover:text-teal-700 transition-colors">End-to-End Project Portfolio</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
@@ -141,7 +141,7 @@ export default function ProgramPage() {
               </p>
             </div>
 
-            <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover-lift group">
+            <div className="p-6 bg-white/85 backdrop-blur-md rounded-xl border border-slate-200/90 shadow-sm space-y-3 card-hover-lift group">
               <FileSpreadsheet className="w-6 h-6 text-cyan-600 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-navy-950 group-hover:text-cyan-700 transition-colors">Real Data Handling Reflexes</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
@@ -149,7 +149,7 @@ export default function ProgramPage() {
               </p>
             </div>
 
-            <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm space-y-3 card-hover-lift group">
+            <div className="p-6 bg-white/85 backdrop-blur-md rounded-xl border border-slate-200/90 shadow-sm space-y-3 card-hover-lift group">
               <ShieldCheck className="w-6 h-6 text-navy-800 group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-navy-950 group-hover:text-navy-700 transition-colors">Evaluated Capstone Evidence</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
@@ -160,7 +160,7 @@ export default function ProgramPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 p-8 rounded-2xl bg-navy-900 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm card-hover-lift">
+        <div className="mt-16 p-8 rounded-2xl bg-navy-900/95 backdrop-blur-md text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl card-hover-lift border border-navy-800">
           <div className="space-y-1">
             <h3 className="text-xl font-bold">Ready to review the full 24-week schedule?</h3>
             <p className="text-slate-300 text-sm">
@@ -169,7 +169,7 @@ export default function ProgramPage() {
           </div>
           <Link
             href="/roadmap"
-            className="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-sm shrink-0 inline-flex items-center gap-2 group transition-all transform hover:-translate-y-0.5"
+            className="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-sm shrink-0 inline-flex items-center gap-2 group transition-all transform hover:-translate-y-0.5 shadow-md"
           >
             <span>View Full Roadmap</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

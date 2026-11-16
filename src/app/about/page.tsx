@@ -14,7 +14,7 @@ export default function AboutPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl space-y-4 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Our Mission &amp; Purpose
           </div>
@@ -31,7 +31,7 @@ export default function AboutPage() {
 
         {/* CORE VALUES */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-4 card-hover-lift group">
+          <div className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm space-y-4 card-hover-lift group">
             <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
               <Target className="w-6 h-6" />
             </div>
@@ -43,7 +43,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-4 card-hover-lift group">
+          <div className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm space-y-4 card-hover-lift group">
             <div className="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300">
               <Shield className="w-6 h-6" />
             </div>
@@ -55,7 +55,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-4 card-hover-lift group">
+          <div className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm space-y-4 card-hover-lift group">
             <div className="w-12 h-12 rounded-xl bg-navy-50 text-navy-800 flex items-center justify-center group-hover:scale-110 group-hover:bg-navy-900 group-hover:text-teal-400 transition-all duration-300">
               <Compass className="w-6 h-6" />
             </div>
@@ -69,8 +69,8 @@ export default function AboutPage() {
         </div>
 
         {/* TRADITIONAL VS ACADEMY COMPARISON TABLE */}
-        <div className="mt-16 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm card-hover-lift">
-          <div className="p-6 bg-slate-50 border-b border-slate-200">
+        <div className="mt-16 bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm card-hover-lift">
+          <div className="p-6 bg-slate-50/80 border-b border-slate-200/90">
             <h2 className="text-2xl font-bold text-navy-950">
               Traditional Online Courses vs. Data Science Job-Ready Academy
             </h2>
@@ -81,14 +81,14 @@ export default function AboutPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-100 text-slate-700 border-b border-slate-200">
+              <thead className="bg-slate-100/90 text-slate-700 border-b border-slate-200/90">
                 <tr>
                   <th className="py-4 px-6 font-semibold w-1/3">Aspect</th>
                   <th className="py-4 px-6 font-semibold w-1/3 text-slate-500">Traditional Course Platform</th>
                   <th className="py-4 px-6 font-semibold w-1/3 text-teal-800 bg-teal-50/50">Data Science Job-Ready Academy</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100/90">
                 <tr className="hover:bg-slate-50/80 transition-colors">
                   <td className="py-4 px-6 font-medium text-navy-950">Starting Point</td>
                   <td className="py-4 px-6 text-slate-600">Teaches syntax from scratch</td>
@@ -120,7 +120,7 @@ export default function AboutPage() {
         </div>
 
         {/* ETHICAL COMMITMENT */}
-        <div className="mt-16 bg-slate-100/70 rounded-2xl p-8 border border-slate-200 space-y-4 card-hover-lift">
+        <div className="mt-16 bg-slate-100/80 backdrop-blur-md rounded-2xl p-8 border border-slate-200/90 space-y-4 card-hover-lift">
           <h3 className="text-lg font-bold text-navy-950">Our Commitment to Honesty</h3>
           <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
             We do not sell false promises. We will never guarantee that enrolling in our platform automatically awards you a job, fixed salary tier, or corporate placement. Your career success depends on your dedication, consistent coding habits, and the tangible quality of work you produce.

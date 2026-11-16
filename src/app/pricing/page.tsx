@@ -26,7 +26,7 @@ export default function PricingPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Investment in Competency
           </div>
@@ -40,7 +40,7 @@ export default function PricingPage() {
 
         {/* PRICING CARD */}
         <div className="mt-12 max-w-2xl mx-auto">
-          <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-xl overflow-hidden card-hover-lift">
+          <div className="bg-white/85 backdrop-blur-md rounded-3xl border-2 border-slate-200/90 shadow-2xl overflow-hidden card-hover-lift">
             {/* Top Badge */}
             <div className="bg-navy-950 text-white px-8 py-4 flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-2">

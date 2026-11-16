@@ -118,7 +118,7 @@ export default function RoadmapPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl space-y-4 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             24-Week Progression
           </div>
@@ -132,30 +132,30 @@ export default function RoadmapPage() {
         </div>
 
         {/* WEEKLY STRUCTURE ACCENT CARD */}
-        <div className="mt-12 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm card-hover-lift animate-fade-in-up animation-delay-100">
+        <div className="mt-12 bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm card-hover-lift animate-fade-in-up animation-delay-100">
           <h2 className="text-xl font-bold text-navy-950 mb-4">
             How Every Week Is Structured
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
-            <div className="space-y-2 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+            <div className="space-y-2 p-3 rounded-xl hover:bg-slate-50/80 transition-colors">
               <span className="font-bold text-teal-700 block">1. The Brief &amp; Dataset</span>
               <p className="text-slate-600">
                 You receive a concrete analytical scenario, dataset dictionary, and specific business questions to answer.
               </p>
             </div>
-            <div className="space-y-2 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+            <div className="space-y-2 p-3 rounded-xl hover:bg-slate-50/80 transition-colors">
               <span className="font-bold text-cyan-700 block">2. Independent Work</span>
               <p className="text-slate-600">
                 You write code, explore files, clean anomalies, and build pipelines in your own local environment.
               </p>
             </div>
-            <div className="space-y-2 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+            <div className="space-y-2 p-3 rounded-xl hover:bg-slate-50/80 transition-colors">
               <span className="font-bold text-indigo-700 block">3. Submission &amp; Rubric</span>
               <p className="text-slate-600">
                 You upload your solution (.py, .ipynb, .sql, .pdf report) before the deadline for scoring.
               </p>
             </div>
-            <div className="space-y-2 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+            <div className="space-y-2 p-3 rounded-xl hover:bg-slate-50/80 transition-colors">
               <span className="font-bold text-emerald-700 block">4. Evaluated Feedback</span>
               <p className="text-slate-600">
                 Instructors review your submission against standardized rubrics and return grades and critique.
@@ -171,13 +171,13 @@ export default function RoadmapPage() {
             return (
               <div
                 key={idx}
-                className="bg-white rounded-2xl border border-slate-200 p-8 lg:p-10 shadow-sm card-hover-lift group relative overflow-hidden"
+                className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 lg:p-10 shadow-sm card-hover-lift group relative overflow-hidden"
               >
                 <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                   {/* Stage Identity */}
                   <div className="space-y-3 max-w-xl">
                     <div className="flex items-center gap-3">
-                      <span className="px-3 py-1 bg-navy-900 text-teal-400 font-bold text-xs uppercase rounded-md group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                      <span className="px-3 py-1 bg-navy-900 text-teal-400 font-bold text-xs uppercase rounded-md group-hover:bg-teal-600 group-hover:text-white transition-colors shadow-sm">
                         {stage.month}
                       </span>
                       <span className="text-xs font-semibold text-slate-500">
@@ -211,7 +211,7 @@ export default function RoadmapPage() {
                   </div>
 
                   {/* Required Deliverables */}
-                  <div className="bg-slate-50 rounded-xl p-6 border border-slate-200/80 lg:max-w-md w-full space-y-3 group-hover:bg-white group-hover:border-slate-300 transition-all">
+                  <div className="bg-slate-50/70 rounded-xl p-6 border border-slate-200/80 lg:max-w-md w-full space-y-3 group-hover:bg-white/90 group-hover:border-slate-300 transition-all">
                     <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                       Required Practice Deliverables
                     </h4>
@@ -237,7 +237,7 @@ export default function RoadmapPage() {
           </p>
           <Link
             href="/how-it-works"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-800 font-semibold text-sm shadow-sm transition-all transform hover:-translate-y-0.5 group"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-800 font-semibold text-sm shadow-md transition-all transform hover:-translate-y-0.5 group"
           >
             <span>See How It Works</span>
             <ArrowRight className="w-4 h-4 text-teal-400 group-hover:translate-x-1.5 transition-transform" />

@@ -57,7 +57,7 @@ export default function FAQPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="space-y-4 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/90 border border-teal-200/80 text-teal-800 text-xs font-semibold uppercase tracking-wider shadow-sm backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Clear Answers
           </div>
@@ -74,10 +74,10 @@ export default function FAQPage() {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className={`rounded-2xl border p-6 sm:p-8 card-hover-lift group ${
+              className={`rounded-2xl border p-6 sm:p-8 card-hover-lift group backdrop-blur-md ${
                 faq.highlight
-                  ? "bg-amber-50/50 border-amber-300"
-                  : "bg-white border-slate-200"
+                  ? "bg-amber-50/80 border-amber-300"
+                  : "bg-white/85 border-slate-200/90 shadow-sm"
               }`}
             >
               <div className="flex items-start gap-4">
@@ -116,7 +116,7 @@ export default function FAQPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-navy-950 text-white rounded-2xl p-8 sm:p-10 border border-navy-850 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm card-hover-lift">
+        <div className="mt-16 bg-navy-950 text-white rounded-2xl p-8 sm:p-10 border border-navy-850 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl card-hover-lift">
           <div className="space-y-1">
             <h3 className="text-xl font-bold">Have additional questions?</h3>
             <p className="text-slate-300 text-sm">
@@ -125,7 +125,7 @@ export default function FAQPage() {
           </div>
           <Link
             href="/program"
-            className="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-sm shrink-0 inline-flex items-center gap-2 group transition-all transform hover:-translate-y-0.5"
+            className="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-sm shrink-0 inline-flex items-center gap-2 group transition-all transform hover:-translate-y-0.5 shadow-md"
           >
             <span>Program Details</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
