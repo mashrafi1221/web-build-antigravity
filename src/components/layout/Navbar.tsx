@@ -19,17 +19,40 @@ const navItems = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState<string>("STUDENT");
   const pathname = usePathname();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
+      if (session) {
+        supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single()
+          .then(({ data }) => {
+            if (data?.role) setUserRole(data.role);
+          });
+      }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAuthenticated(!!session);
+      if (session) {
+        supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single()
+          .then(({ data }) => {
+            if (data?.role) setUserRole(data.role);
+          });
+      } else {
+        setUserRole("STUDENT");
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -83,6 +106,18 @@ export function Navbar() {
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span>Dashboard</span>
+              </Link>
+            )}
+            {isAuthenticated && (userRole === "ADMIN" || userRole === "INSTRUCTOR") && (
+              <Link
+                href="/admin"
+                className={`px-3 py-1.5 rounded-md text-sm font-bold transition-colors flex items-center gap-1.5 ${
+                  pathname === "/admin"
+                    ? "text-purple-700 bg-purple-50"
+                    : "text-purple-600 hover:text-purple-700 hover:bg-purple-50/50"
+                }`}
+              >
+                <span>Admin Portal</span>
               </Link>
             )}
           </nav>

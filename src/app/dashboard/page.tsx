@@ -21,6 +21,7 @@ import {
   ExternalLink,
   Sparkles,
   RefreshCw,
+  ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -253,6 +254,15 @@ export default function DashboardPage() {
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
                 {profile?.role || "STUDENT"}
               </span>
+              {(profile?.role === "ADMIN" || profile?.role === "INSTRUCTOR") && (
+                <Link
+                  href="/admin"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-navy-900 text-teal-300 hover:bg-navy-800 text-xs font-bold shadow-sm transition-all"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
+                  <span>Open Admin Portal</span>
+                </Link>
+              )}
             </div>
             <p className="text-sm text-slate-500">
               {profile?.email} • Enrolled: Data Science Job-Ready Academy (Month 1 Active)
