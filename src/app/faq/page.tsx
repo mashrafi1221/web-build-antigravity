@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { HelpCircle, ArrowRight, AlertTriangle, ShieldCheck } from "lucide-react";
+import { HelpCircle, ArrowRight, AlertTriangle, ShieldCheck, Sparkles } from "lucide-react";
 
 export const metadata = {
   title: "Frequently Asked Questions | Data Science Job-Ready Academy",
@@ -56,10 +56,11 @@ export default function FAQPage() {
     <div className="py-12 sm:py-16 space-y-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="space-y-4">
-          <span className="text-teal-600 font-semibold text-sm uppercase tracking-wider">
+        <div className="space-y-4 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Clear Answers
-          </span>
+          </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-950 tracking-tight">
             Frequently Asked Questions
           </h1>
@@ -68,23 +69,23 @@ export default function FAQPage() {
           </p>
         </div>
 
-        {/* FAQ ACCORDION / LIST */}
+        {/* FAQ LIST */}
         <div className="mt-12 space-y-6">
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className={`rounded-2xl border p-6 sm:p-8 transition-all ${
+              className={`rounded-2xl border p-6 sm:p-8 card-hover-lift group ${
                 faq.highlight
-                  ? "bg-amber-50/50 border-amber-300 shadow-sm"
-                  : "bg-white border-slate-200 shadow-sm hover:border-slate-300"
+                  ? "bg-amber-50/50 border-amber-300"
+                  : "bg-white border-slate-200"
               }`}
             >
               <div className="flex items-start gap-4">
                 <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform ${
                     faq.highlight
                       ? "bg-amber-100 text-amber-800"
-                      : "bg-teal-50 text-teal-700"
+                      : "bg-teal-50 text-teal-700 group-hover:bg-teal-500 group-hover:text-white transition-colors"
                   }`}
                 >
                   {faq.highlight ? (
@@ -95,8 +96,8 @@ export default function FAQPage() {
                 </div>
                 <div className="space-y-2">
                   <h3
-                    className={`text-lg sm:text-xl font-bold ${
-                      faq.highlight ? "text-amber-950" : "text-navy-950"
+                    className={`text-lg sm:text-xl font-bold transition-colors ${
+                      faq.highlight ? "text-amber-950" : "text-navy-950 group-hover:text-teal-700"
                     }`}
                   >
                     {faq.q}
@@ -115,7 +116,7 @@ export default function FAQPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-navy-950 text-white rounded-2xl p-8 sm:p-10 border border-navy-850 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="mt-16 bg-navy-950 text-white rounded-2xl p-8 sm:p-10 border border-navy-850 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm card-hover-lift">
           <div className="space-y-1">
             <h3 className="text-xl font-bold">Have additional questions?</h3>
             <p className="text-slate-300 text-sm">
@@ -124,10 +125,10 @@ export default function FAQPage() {
           </div>
           <Link
             href="/program"
-            className="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-sm shrink-0 inline-flex items-center gap-2"
+            className="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-navy-950 font-bold text-sm shrink-0 inline-flex items-center gap-2 group transition-all transform hover:-translate-y-0.5"
           >
             <span>Program Details</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

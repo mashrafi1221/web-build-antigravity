@@ -25,10 +25,11 @@ export default function PricingPage() {
     <div className="py-12 sm:py-16 space-y-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="text-teal-600 font-semibold text-sm uppercase tracking-wider">
+        <div className="text-center max-w-3xl mx-auto space-y-4 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-pulse-slow" />
             Investment in Competency
-          </span>
+          </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-navy-950 tracking-tight">
             Transparent Academy Enrollment
           </h1>
@@ -39,21 +40,21 @@ export default function PricingPage() {
 
         {/* PRICING CARD */}
         <div className="mt-12 max-w-2xl mx-auto">
-          <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-lg overflow-hidden">
+          <div className="bg-white rounded-3xl border-2 border-slate-200 shadow-xl overflow-hidden card-hover-lift">
             {/* Top Badge */}
             <div className="bg-navy-950 text-white px-8 py-4 flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 animate-pulse-slow" />
                 6-Month Practical Cohort
               </span>
-              <span className="text-xs bg-navy-850 px-3 py-1 rounded-full text-slate-300 font-semibold">
+              <span className="text-xs bg-navy-850 px-3 py-1 rounded-full text-slate-300 font-semibold border border-navy-700">
                 Bangladesh &amp; International
               </span>
             </div>
 
             {/* Price Announcement Banner */}
-            <div className="p-8 sm:p-10 border-b border-slate-100 bg-slate-50/50 space-y-4 text-center">
-              <span className="inline-block px-3.5 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider">
+            <div className="p-8 sm:p-10 border-b border-slate-100 bg-slate-50/70 space-y-4 text-center">
+              <span className="inline-block px-3.5 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider animate-pulse-slow">
                 Enrollment Opening Soon
               </span>
               <h2 className="text-3xl sm:text-4xl font-black text-navy-950">
@@ -71,9 +72,9 @@ export default function PricingPage() {
               </h3>
               <ul className="space-y-3.5 text-sm text-slate-700">
                 {inclusions.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
-                    <span>{item}</span>
+                  <li key={idx} className="flex items-start gap-3 group">
+                    <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                    <span className="group-hover:text-navy-950 transition-colors">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -81,7 +82,7 @@ export default function PricingPage() {
               <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/register"
-                  className="w-full py-3.5 px-6 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-center text-sm shadow transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 px-6 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-center text-sm shadow transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
                 >
                   <Bell className="w-4 h-4 text-teal-400" />
                   <span>Register for Updates</span>
