@@ -2,20 +2,59 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Terminal, Lock, Mail, User, Globe, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Terminal, Lock, Mail, User, Globe, ArrowRight, ShieldCheck, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [country, setCountry] = useState("Bangladesh");
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatusMessage(
-      "Phase 1 Visual Foundation: Account registration with Supabase Auth will be activated in Phase 2."
-    );
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            country: country,
+            role: "STUDENT",
+          },
+        },
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        setSuccessMessage(
+          "Account created successfully! Redirecting you to the student dashboard..."
+        );
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 1500);
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setErrorMessage(error.message || "An unexpected error occurred during registration.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,9 +72,17 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        {statusMessage && (
-          <div className="p-3 bg-teal-50 border border-teal-200 rounded-lg text-xs text-teal-800 font-medium">
-            {statusMessage}
+        {errorMessage && (
+          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="p-3.5 bg-teal-50 border border-teal-200 rounded-xl text-xs text-teal-800 flex items-start gap-2">
+            <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
+            <span>{successMessage}</span>
           </div>
         )}
 
@@ -100,9 +147,10 @@ export default function RegisterPage() {
               <input
                 type="password"
                 required
+                minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
+                placeholder="At least 6 characters"
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50/80 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
               />
             </div>
@@ -117,10 +165,20 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full py-3 px-4 rounded-xl bg-navy-900 hover:bg-navy-800 disabled:opacity-50 text-white font-semibold text-sm shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
           >
-            <span>Create Student Account</span>
-            <ArrowRight className="w-4 h-4 text-teal-400" />
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 text-teal-400 animate-spin" />
+                <span>Creating Account...</span>
+              </>
+            ) : (
+              <>
+                <span>Create Student Account</span>
+                <ArrowRight className="w-4 h-4 text-teal-400" />
+              </>
+            )}
           </button>
         </form>
 

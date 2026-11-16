@@ -1,0 +1,471 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  Terminal,
+  User,
+  LogOut,
+  Download,
+  UploadCloud,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  FileCode,
+  Trophy,
+  Award,
+  ChevronRight,
+  Loader2,
+  Send,
+  ExternalLink,
+} from "lucide-react";
+import { supabase } from "@/lib/supabase";
+
+interface Profile {
+  id: string;
+  full_name: string;
+  email: string;
+  country: string;
+  role: string;
+}
+
+interface Activity {
+  id: string;
+  title: string;
+  activity_type: string;
+  content: string;
+  exercises?: {
+    id: string;
+    title: string;
+    description: string;
+    difficulty: string;
+    dataset_url: string;
+    data_dictionary: Record<string, string>;
+    deliverables_format: string;
+  }[];
+}
+
+interface Submission {
+  id: string;
+  activity_id: string;
+  file_url: string;
+  file_name: string;
+  submission_notes: string;
+  status: string;
+  submitted_at: string;
+  activities?: {
+    title: string;
+  };
+  grades?: {
+    score: number;
+    max_score: number;
+    feedback: string;
+    graded_at: string;
+  };
+}
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  
+  // Submission Form State
+  const [selectedActivityId, setSelectedActivityId] = useState<string>("");
+  const [submissionNotes, setSubmissionNotes] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      // 1. Check Session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+        return;
+      }
+
+      // 2. Fetch Profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profileData) {
+        setProfile(profileData);
+      } else {
+        setProfile({
+          id: session.user.id,
+          full_name: session.user.user_metadata?.full_name || "Student User",
+          email: session.user.email || "",
+          country: session.user.user_metadata?.country || "Bangladesh",
+          role: session.user.user_metadata?.role || "STUDENT",
+        });
+      }
+
+      // 3. Fetch Activities & Exercises for Month 1
+      const { data: activitiesData } = await supabase
+        .from("activities")
+        .select("id, title, activity_type, content, exercises(id, title, description, difficulty, dataset_url, data_dictionary, deliverables_format)")
+        .order("order_index", { ascending: true });
+
+      if (activitiesData) {
+        setActivities(activitiesData as Activity[]);
+        if (activitiesData.length > 0) {
+          setSelectedActivityId(activitiesData[0].id);
+        }
+      }
+
+      // 4. Fetch User's Submissions & Grades
+      const { data: submissionsData } = await supabase
+        .from("submissions")
+        .select("id, activity_id, file_url, file_name, submission_notes, status, submitted_at, activities(title), grades(score, max_score, feedback, graded_at)")
+        .eq("user_id", session.user.id)
+        .order("submitted_at", { ascending: false });
+
+      if (submissionsData) {
+        setSubmissions(submissionsData as unknown as Submission[]);
+      }
+    } catch (err) {
+      console.error("Dashboard data fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  const handleSubmitSolution = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) return;
+    setSubmitting(true);
+    setSubmitMessage(null);
+
+    try {
+      const { data, error } = await supabase.from("submissions").insert({
+        activity_id: selectedActivityId,
+        user_id: profile.id,
+        file_url: fileUrl || "https://github.com/student/solution-repo",
+        file_name: "student_solution.py",
+        submission_notes: submissionNotes,
+        status: "submitted",
+      }).select();
+
+      if (error) {
+        setSubmitMessage(`Submission failed: ${error.message}`);
+      } else {
+        setSubmitMessage("Solution submitted successfully for instructor evaluation!");
+        setSubmissionNotes("");
+        setFileUrl("");
+        // Refresh submissions
+        fetchDashboardData();
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setSubmitMessage(`Error: ${error.message}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="w-8 h-8 text-teal-600 animate-spin" />
+        <p className="text-sm font-medium text-slate-600">Loading your student dashboard...</p>
+      </div>
+    );
+  }
+
+  const activeActivity = activities.find((a) => a.id === selectedActivityId) || activities[0];
+  const activeExercise = activeActivity?.exercises?.[0];
+
+  return (
+    <div className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      {/* HEADER BAR */}
+      <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 card-hover-lift">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-navy-900 text-teal-400 flex items-center justify-center font-bold text-xl shadow-md">
+            <Terminal className="w-7 h-7" />
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-navy-950">
+                Welcome back, {profile?.full_name || "Student"}
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                {profile?.role || "STUDENT"}
+              </span>
+            </div>
+            <p className="text-sm text-slate-500">
+              {profile?.email} • Enrolled: Data Science Job-Ready Academy (Month 1 Active)
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSignOut}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors self-start md:self-auto"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>Sign Out</span>
+        </button>
+      </div>
+
+      {/* METRICS & STAGE SUMMARY */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white/85 backdrop-blur-md rounded-2xl p-6 border border-slate-200/90 shadow-sm space-y-2 card-hover-lift">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Active Stage</span>
+          <h3 className="text-xl font-bold text-navy-950">Month 1: Python</h3>
+          <p className="text-xs text-slate-500">Week 2 of 24 • Data Manipulation</p>
+        </div>
+
+        <div className="bg-white/85 backdrop-blur-md rounded-2xl p-6 border border-slate-200/90 shadow-sm space-y-2 card-hover-lift">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Tasks Completed</span>
+          <h3 className="text-xl font-bold text-teal-700">{submissions.length} / 4 Submitted</h3>
+          <p className="text-xs text-slate-500">Next milestone due Sunday</p>
+        </div>
+
+        <div className="bg-white/85 backdrop-blur-md rounded-2xl p-6 border border-slate-200/90 shadow-sm space-y-2 card-hover-lift">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Evaluated Submissions</span>
+          <h3 className="text-xl font-bold text-navy-950">
+            {submissions.filter((s) => s.grades).length} Graded
+          </h3>
+          <p className="text-xs text-slate-500">Detailed rubric reviews received</p>
+        </div>
+
+        <div className="bg-white/85 backdrop-blur-md rounded-2xl p-6 border border-slate-200/90 shadow-sm space-y-2 card-hover-lift">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Average Score</span>
+          <h3 className="text-xl font-bold text-cyan-700">
+            {submissions.filter((s) => s.grades).length > 0
+              ? `${(
+                  submissions
+                    .filter((s) => s.grades)
+                    .reduce((acc, curr) => acc + (curr.grades?.score || 0), 0) /
+                  submissions.filter((s) => s.grades).length
+                ).toFixed(1)} / 100`
+              : "Pending review"}
+          </h3>
+          <p className="text-xs text-slate-500">Min. passing benchmark: 70</p>
+        </div>
+      </div>
+
+      {/* ACTIVE PRACTICAL WORKFLOW */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left 2 Cols: Active Practical Challenge & Submission */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 p-8 shadow-sm space-y-6 card-hover-lift">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+              <div className="space-y-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-200">
+                  Current Assigned Challenge
+                </span>
+                <h2 className="text-xl font-extrabold text-navy-950">
+                  {activeActivity?.title || "Python Practical Challenge"}
+                </h2>
+              </div>
+
+              {/* Task Selector */}
+              <select
+                value={selectedActivityId}
+                onChange={(e) => setSelectedActivityId(e.target.value)}
+                className="bg-slate-50 border border-slate-200 text-xs font-semibold rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+              >
+                {activities.map((act) => (
+                  <option key={act.id} value={act.id}>
+                    {act.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Scenario Brief */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Scenario &amp; Task Brief</h4>
+              <p className="text-sm text-slate-700 leading-relaxed bg-slate-50/80 p-4 rounded-xl border border-slate-200/70">
+                {activeActivity?.content}
+              </p>
+            </div>
+
+            {/* Exercise Details & Dataset Download */}
+            {activeExercise && (
+              <div className="space-y-4">
+                <div className="bg-teal-50/50 rounded-xl p-5 border border-teal-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <span className="text-xs font-bold text-teal-800 uppercase tracking-wider">
+                      Provided Raw Dataset ({activeExercise.difficulty})
+                    </span>
+                    <p className="text-sm font-semibold text-navy-950">{activeExercise.title}</p>
+                    <p className="text-xs text-slate-500">Deliverable: {activeExercise.deliverables_format}</p>
+                  </div>
+                  <a
+                    href={activeExercise.dataset_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-navy-900 text-white hover:bg-navy-800 text-xs font-bold shrink-0 shadow-sm transition-all transform hover:-translate-y-0.5"
+                  >
+                    <Download className="w-4 h-4 text-teal-400" />
+                    <span>Download Dataset</span>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* SUBMISSION FORM */}
+            <div className="border-t border-slate-100 pt-6 space-y-4">
+              <h4 className="text-sm font-bold text-navy-950 flex items-center gap-2">
+                <UploadCloud className="w-4 h-4 text-teal-600" />
+                Upload Your Practical Solution
+              </h4>
+
+              {submitMessage && (
+                <div
+                  className={`p-3.5 rounded-xl text-xs font-medium flex items-start gap-2 ${
+                    submitMessage.includes("success")
+                      ? "bg-teal-50 border border-teal-200 text-teal-800"
+                      : "bg-rose-50 border border-rose-200 text-rose-800"
+                  }`}
+                >
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{submitMessage}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmitSolution} className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-700">
+                    Solution Code URL / GitHub Repository Link
+                  </label>
+                  <input
+                    type="url"
+                    required
+                    value={fileUrl}
+                    onChange={(e) => setFileUrl(e.target.value)}
+                    placeholder="https://github.com/your-username/challenge-1-solution"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-700">
+                    Execution Notes &amp; Methodology Explanation
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={submissionNotes}
+                    onChange={(e) => setSubmissionNotes(e.target.value)}
+                    placeholder="Explain your data cleaning logic, vectorization approach, and handling of edge-cases..."
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-6 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 disabled:opacity-50 text-white font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 text-teal-400 animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 text-teal-400" />
+                      <span>Submit Solution for Evaluation</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Col: Submissions & Graded Feedback */}
+        <div className="space-y-6">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 p-6 shadow-sm space-y-4 card-hover-lift">
+            <h3 className="font-bold text-navy-950 text-lg flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-teal-600" />
+              Submission History &amp; Feedback
+            </h3>
+
+            {submissions.length === 0 ? (
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200/70 text-center space-y-2">
+                <FileCode className="w-8 h-8 text-slate-400 mx-auto" />
+                <p className="text-sm font-semibold text-slate-700">No submissions yet</p>
+                <p className="text-xs text-slate-500">
+                  Download the dataset on the left, complete your code, and submit your solution to receive instructor grading.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {submissions.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-navy-950 truncate max-w-[180px]">
+                        {sub.activities?.title || "Practical Task"}
+                      </span>
+                      <span
+                        className={`text-xs px-2.5 py-0.5 rounded-full font-bold uppercase ${
+                          sub.status === "graded"
+                            ? "bg-teal-100 text-teal-800"
+                            : "bg-amber-100 text-amber-800"
+                        }`}
+                      >
+                        {sub.status}
+                      </span>
+                    </div>
+
+                    <a
+                      href={sub.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-teal-700 hover:underline flex items-center gap-1"
+                    >
+                      <span>View Submitted Code</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+
+                    {sub.grades ? (
+                      <div className="bg-white p-3 rounded-lg border border-teal-200 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-600">Instructor Grade:</span>
+                          <span className="text-sm font-black text-teal-700">
+                            {sub.grades.score} / {sub.grades.max_score}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                          &ldquo;{sub.grades.feedback}&rdquo;
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-500 italic">
+                        Under review by instructor. Rubric feedback will appear here.
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

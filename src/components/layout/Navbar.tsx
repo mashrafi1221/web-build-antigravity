@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Terminal, ChevronRight } from "lucide-react";
+import { Menu, X, Terminal, ChevronRight, LayoutDashboard } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -17,10 +18,25 @@ const navItems = [
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
@@ -56,23 +72,48 @@ export function Navbar() {
                 </Link>
               );
             })}
+            {isAuthenticated && (
+              <Link
+                href="/dashboard"
+                className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-colors flex items-center gap-1.5 ${
+                  pathname === "/dashboard"
+                    ? "text-teal-700 bg-teal-50"
+                    : "text-teal-600 hover:text-teal-700 hover:bg-teal-50/50"
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Dashboard</span>
+              </Link>
+            )}
           </nav>
 
           {/* Auth Action Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-navy-950 transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-navy-900 text-white hover:bg-navy-800 text-sm font-medium shadow-sm transition-all"
-            >
-              <span>Enroll Now</span>
-              <ChevronRight className="w-4 h-4 text-teal-400" />
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-navy-900 text-white hover:bg-navy-800 text-sm font-medium shadow-sm transition-all"
+              >
+                <LayoutDashboard className="w-4 h-4 text-teal-400" />
+                <span>Student Dashboard</span>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-navy-950 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-navy-900 text-white hover:bg-navy-800 text-sm font-medium shadow-sm transition-all transform hover:-translate-y-0.5"
+                >
+                  <span>Enroll Now</span>
+                  <ChevronRight className="w-4 h-4 text-teal-400" />
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -113,21 +154,42 @@ export function Navbar() {
               </Link>
             );
           })}
+          {isAuthenticated && (
+            <Link
+              href="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-bold text-teal-700 bg-teal-50"
+            >
+              Student Dashboard
+            </Link>
+          )}
           <div className="pt-4 border-t border-slate-100 flex flex-col gap-2">
-            <Link
-              href="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 rounded-lg border border-slate-200"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-2.5 text-sm font-medium text-white bg-navy-900 rounded-lg shadow-sm"
-            >
-              Enroll Now
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 text-sm font-medium text-white bg-navy-900 rounded-lg shadow-sm"
+              >
+                Open Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 text-sm font-semibold text-slate-700 rounded-lg border border-slate-200"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 text-sm font-medium text-white bg-navy-900 rounded-lg shadow-sm"
+                >
+                  Enroll Now
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

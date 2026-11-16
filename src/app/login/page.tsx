@@ -2,18 +2,43 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Terminal, Lock, Mail, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Terminal, Lock, Mail, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatusMessage(
-      "Phase 1 Visual Foundation: Supabase Auth integration will be wired in Phase 2."
-    );
+    setErrorMessage(null);
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (data.session) {
+        router.push("/dashboard");
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      setErrorMessage(error.message || "An unexpected error occurred during sign in.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,9 +56,10 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {statusMessage && (
-          <div className="p-3 bg-teal-50 border border-teal-200 rounded-lg text-xs text-teal-800 font-medium">
-            {statusMessage}
+        {errorMessage && (
+          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <span>{errorMessage}</span>
           </div>
         )}
 
@@ -60,9 +86,6 @@ export default function LoginPage() {
               <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
                 Password
               </label>
-              <span className="text-xs text-slate-400 cursor-not-allowed">
-                Forgot password?
-              </span>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
@@ -79,10 +102,20 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full py-3 px-4 rounded-xl bg-navy-900 hover:bg-navy-800 disabled:opacity-50 text-white font-semibold text-sm shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
           >
-            <span>Sign In</span>
-            <ArrowRight className="w-4 h-4 text-teal-400" />
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 text-teal-400 animate-spin" />
+                <span>Signing in...</span>
+              </>
+            ) : (
+              <>
+                <span>Sign In</span>
+                <ArrowRight className="w-4 h-4 text-teal-400" />
+              </>
+            )}
           </button>
         </form>
 
