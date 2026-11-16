@@ -300,6 +300,13 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            href={profile ? `/portfolio/${profile.id}` : "/portfolio"}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold transition-all shadow-sm"
+          >
+            <Award className="w-4 h-4 text-teal-600" />
+            <span>My Portfolio</span>
+          </Link>
           <button
             onClick={fetchDashboardData}
             title="Refresh Dashboard"

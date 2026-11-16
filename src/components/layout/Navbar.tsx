@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Terminal, ChevronRight, LayoutDashboard } from "lucide-react";
+import { Menu, X, Terminal, ChevronRight, LayoutDashboard, Award } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const navItems = [
@@ -108,6 +108,19 @@ export function Navbar() {
                 <span>Dashboard</span>
               </Link>
             )}
+            {isAuthenticated && (
+              <Link
+                href="/portfolio"
+                className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-colors flex items-center gap-1.5 ${
+                  pathname.startsWith("/portfolio")
+                    ? "text-teal-700 bg-teal-50"
+                    : "text-slate-600 hover:text-navy-900 hover:bg-slate-50"
+                }`}
+              >
+                <Award className="w-4 h-4 text-teal-600" />
+                <span>Portfolio</span>
+              </Link>
+            )}
             {isAuthenticated && (userRole === "ADMIN" || userRole === "INSTRUCTOR") && (
               <Link
                 href="/admin"
@@ -196,6 +209,15 @@ export function Navbar() {
               className="block px-3 py-2 rounded-md text-base font-bold text-teal-700 bg-teal-50"
             >
               Student Dashboard
+            </Link>
+          )}
+          {isAuthenticated && (
+            <Link
+              href="/portfolio"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-bold text-teal-700 hover:bg-teal-50"
+            >
+              My Portfolio
             </Link>
           )}
           <div className="pt-4 border-t border-slate-100 flex flex-col gap-2">

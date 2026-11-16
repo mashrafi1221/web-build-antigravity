@@ -617,6 +617,7 @@ export default function AdminPortalPage() {
                   <th className="py-3 px-6 font-semibold">Country</th>
                   <th className="py-3 px-6 font-semibold">Assigned Role</th>
                   <th className="py-3 px-6 font-semibold">Joined Date</th>
+                  <th className="py-3 px-6 font-semibold text-right">Portfolio</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -645,6 +646,16 @@ export default function AdminPortalPage() {
                     </td>
                     <td className="py-3.5 px-6 text-slate-500">
                       {new Date(st.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-3.5 px-6 text-right">
+                      <Link
+                        href={`/portfolio/${st.id}`}
+                        target="_blank"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold text-[11px] transition-colors border border-teal-200"
+                      >
+                        <span>View Portfolio</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
                     </td>
                   </tr>
                 ))}
