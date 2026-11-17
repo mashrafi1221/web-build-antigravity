@@ -2,7 +2,7 @@ import React from "react";
 
 export function BackgroundCanvas() {
   return (
-    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
+    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden no-print" aria-hidden="true">
       {/* 1. Subtle Engineering Grid Pattern */}
       <div className="absolute inset-0 bg-tech-grid opacity-60 [mask-image:radial-gradient(ellipse_at_top,white_70%,transparent_100%)]" />
 

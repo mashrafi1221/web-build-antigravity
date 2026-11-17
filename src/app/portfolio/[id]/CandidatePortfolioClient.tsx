@@ -30,6 +30,7 @@ import {
   HelpCircle,
   AlertCircle,
 } from "lucide-react";
+import { CandidateDossier } from "./CandidateDossier";
 
 export interface PublicProfile {
   id: string;
@@ -77,6 +78,7 @@ export default function CandidatePortfolioClient({ initialData, studentId }: Pro
   const [expandedEvals, setExpandedEvals] = useState<Record<string, boolean>>({});
   const [timeFilter, setTimeFilter] = useState("Last 6 Months");
   const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [showPdfPreviewModal, setShowPdfPreviewModal] = useState(false);
 
   if (!initialData || !initialData.profile) {
     return (
@@ -146,13 +148,12 @@ export default function CandidatePortfolioClient({ initialData, studentId }: Pro
   };
 
   const handleDownloadReport = () => {
-    if (typeof window !== "undefined") {
-      window.print();
-    }
+    setShowPdfPreviewModal(true);
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 pt-20 pb-24 px-3 sm:px-6 lg:px-8">
+    <>
+      <div className="web-only min-h-screen bg-[#f8fafc] text-slate-900 pt-20 pb-24 px-3 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* TOP BREADCRUMB & USER NAV ROW */}
         <div className="flex items-center justify-between text-xs text-slate-500 pt-4 pb-1">
@@ -763,7 +764,7 @@ export default function CandidatePortfolioClient({ initialData, studentId }: Pro
                       <div className="grid grid-cols-2 gap-2 pt-1">
                         <button
                           type="button"
-                          onClick={() => toggleEval(sub.id)}
+                          onClick={() => setShowPdfPreviewModal(true)}
                           className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-navy-950 hover:bg-navy-800 text-white font-bold text-xs shadow-sm transition-all"
                         >
                           <FileText className="w-3.5 h-3.5 text-teal-400" />
@@ -1042,5 +1043,26 @@ export default function CandidatePortfolioClient({ initialData, studentId }: Pro
         </div>
       )}
     </div>
+
+    {/* Dedicated Printable Dossier (Always available for window.print()) */}
+    <CandidateDossier
+      profile={profile}
+      submissions={submissions}
+      exams={exams}
+      studentId={studentId}
+    />
+
+    {/* PDF Dossier Preview Modal */}
+    {showPdfPreviewModal && (
+      <CandidateDossier
+        isModal
+        profile={profile}
+        submissions={submissions}
+        exams={exams}
+        studentId={studentId}
+        onClose={() => setShowPdfPreviewModal(false)}
+      />
+    )}
+  </>
   );
 }

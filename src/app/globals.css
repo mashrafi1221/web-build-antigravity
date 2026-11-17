@@ -88,3 +88,55 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Dedicated Print & PDF Export Formatting for Candidate Dossier */
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm 10mm 12mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt;
+    line-height: 1.4;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide interactive web UI */
+  header,
+  footer,
+  nav,
+  button,
+  select,
+  .no-print,
+  .print-hidden {
+    display: none !important;
+  }
+
+  /* Display dedicated printable dossier */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Hide web page wrapper when printing dedicated dossier */
+  .web-only {
+    display: none !important;
+  }
+
+  .print-break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-page-break {
+    page-break-before: always !important;
+    break-before: always !important;
+  }
+}
